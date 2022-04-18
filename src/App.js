@@ -7,6 +7,7 @@ import Checkout from "./components/Checkout/Checkout";
 import Blog from "./components/Blog/Blog";
 import About from "./components/About/About";
 import Login from "./components/Login/Login";
+import Register from "./components/Register/Register";
 
 function App() {
     return (
@@ -18,6 +19,7 @@ function App() {
                 <Route path="/blog" element={<Blog></Blog>}></Route>
                 <Route path="/about" element={<About></About>}></Route>
                 <Route path="/login" element={<Login></Login>}></Route>
+                <Route path="/register" element={<Register></Register>}></Route>
             </Routes>
         </div>
     );

@@ -16,9 +16,9 @@ const Home = () => {
                     </h3>
                     <p className="text-2xl text-teal-900 px-4 md:px-8 lg:px-16 mt-5 md:mt-10">
                         My patient's comfort is the highest priority to me. I
-                        follow the best treatment methods out htere with latest
+                        follow the best treatment methods out there with latest
                         lechnology and devices. I love to treat my patients with
-                        love and this is my passion.
+                        love and care which is my passion.
                     </p>
                 </div>
                 <div className="mx-auto">

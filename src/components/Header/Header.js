@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 
 const Header = () => {
     const [toggle, setToggle] = useState(false);
+
+    // for menue button toggle
     const manageToggle = () => {
         if (toggle) {
             setToggle(false);
@@ -10,6 +12,7 @@ const Header = () => {
             setToggle(true);
         }
     };
+
     return (
         <div className="sticky top-0 z-10">
             <nav className="flex flex-wrap justify-between bg-sky-400 p-4 h-16">
