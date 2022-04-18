@@ -1,4 +1,6 @@
 import React from "react";
+import Footer from "../Footer/Footer";
+import Services from "../Services/Services";
 import "./Home.css";
 
 const Home = () => {
@@ -28,6 +30,8 @@ const Home = () => {
                 <div className="h-3 w-3 rounded-[50%] bg-slate-200 m-2"></div>
                 <div className="h-1 bg-slate-300 w-2/5 rounded"></div>
             </div>
+            <Services></Services>
+            <Footer></Footer>
         </>
     );
 };

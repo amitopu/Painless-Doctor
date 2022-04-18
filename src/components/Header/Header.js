@@ -11,7 +11,7 @@ const Header = () => {
         }
     };
     return (
-        <div className="sticky">
+        <div className="sticky top-0 z-10">
             <nav className="flex flex-wrap justify-between bg-sky-400 p-4 h-16">
                 <div className="text-white font-semibold text-3xl italic sm:w-1/2 md:w-auto">
                     Painless Doctor
