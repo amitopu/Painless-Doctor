@@ -11,15 +11,15 @@ const Header = () => {
         }
     };
     return (
-        <div>
-            <nav className="flex flex-wrap justify-between bg-sky-400 p-4">
-                <div className="text-white font-semibold text-3xl italic">
+        <div className="sticky">
+            <nav className="flex flex-wrap justify-between bg-sky-400 p-4 h-16">
+                <div className="text-white font-semibold text-3xl italic sm:w-1/2 md:w-auto">
                     Painless Doctor
                 </div>
 
                 <div
                     onClick={manageToggle}
-                    className="flex justify-end w-40 lg:hidden bg-sky-400"
+                    className="flex justify-end sm:w-1/2 md:w-auto md:hidden bg-sky-400"
                 >
                     {toggle ? (
                         <svg
@@ -49,20 +49,26 @@ const Header = () => {
                         </svg>
                     )}
                 </div>
-                <div className="lg:flex">
-                    <div className="mr-5 font-bold text-white hover:font-extrabold lg:hover:border-b-2 lg:hover:border-white w-40 lg:w-auto">
+                <div
+                    className={`${
+                        toggle
+                            ? "fixed top-20 right-4 p-5 rounded"
+                            : "fixed top-5 right-[-200px]"
+                    } md:right-auto md:top-auto md:relative md:flex bg-sky-400 w-40 md:w-auto md:p-0 transition-all duration-500 ease-in-out `}
+                >
+                    <div className="mx-auto md:mr-5 font-bold text-white hover:font-extrabold md:hover:border-b-2 md:hover:border-white w-40 md:w-auto">
                         <Link to="/">Home</Link>
                     </div>
-                    <div className="mr-5 font-bold text-white hover:font-extrabold lg:hover:border-b-2 lg:hover:border-white w-40 lg:w-auto">
+                    <div className="mx-auto md:mr-5 font-bold text-white hover:font-extrabold md:hover:border-b-2 md:hover:border-white w-40 md:w-auto">
                         <Link to="/checkout">Checkout</Link>
                     </div>
-                    <div className="mr-5 font-bold text-white hover:font-extrabold lg:hover:border-b-2 lg:hover:border-white w-40 lg:w-auto">
+                    <div className="mx-auto md:mr-5 font-bold text-white hover:font-extrabold md:hover:border-b-2 md:hover:border-white w-40 md:w-auto">
                         <Link to="/blog">Blog</Link>
                     </div>
-                    <div className="mr-5 font-bold text-white hover:font-extrabold lg:hover:border-b-2 lg:hover:border-white w-40 lg:w-auto">
+                    <div className="mx-auto md:mr-5 font-bold text-white hover:font-extrabold md:hover:border-b-2 md:hover:border-white w-40 md:w-auto">
                         <Link to="/about">About</Link>
                     </div>
-                    <div className="mr-5 font-bold text-white hover:font-extrabold lg:hover:border-b-2 lg:hover:border-white w-40 lg:w-auto">
+                    <div className="mx-auto md:mr-5 font-bold text-white hover:font-extrabold md:hover:border-b-2 md:hover:border-white w-40 md:w-auto">
                         <Link to="/login">Login</Link>
                     </div>
                 </div>

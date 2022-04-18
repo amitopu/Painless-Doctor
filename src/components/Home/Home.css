@@ -1,0 +1,6 @@
+img {
+    width: 600px;
+    max-height: 100%;
+    min-height: 80%;
+    object-fit: cover;
+}
