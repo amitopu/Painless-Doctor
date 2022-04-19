@@ -14,6 +14,10 @@ function App() {
             <Header></Header>
             <Routes>
                 <Route path="/" element={<Home></Home>}></Route>
+                <Route
+                    path="/checkout/:name"
+                    element={<Checkout></Checkout>}
+                ></Route>
                 <Route path="/checkout" element={<Checkout></Checkout>}></Route>
                 <Route path="/blog" element={<Blog></Blog>}></Route>
                 <Route path="/about" element={<About></About>}></Route>

@@ -1,7 +1,14 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const Service = (props) => {
     const { id, name, description, photoUrl, price } = props.service;
+    const navigate = useNavigate();
+
+    // for handling book now button
+    const handleBookNow = (name) => {
+        navigate(`/checkout/${name}`);
+    };
     return (
         <div className="h-[460px] border-4 border-teal-700 py-3 rounded-2xl drop-shadow-md">
             <div className="mx-auto">
@@ -14,7 +21,10 @@ const Service = (props) => {
             <h2 className="text-2xl text-cyan-800 my-3">{name}</h2>
             <p className="text-cyan-900 px-5 my-3">{description}</p>
             <h2 className="text-3xl text-cyan-600 my-3">{price}$</h2>
-            <button className="text-xl hover:font-bold h-10 w-40 bg-yellow-600 hover:bg-yellow-700 rounded">
+            <button
+                onClick={() => handleBookNow(name)}
+                className="text-xl hover:font-bold h-10 w-40 bg-yellow-600 hover:bg-yellow-700 rounded"
+            >
                 Book Now
             </button>
         </div>
