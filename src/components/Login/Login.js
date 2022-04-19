@@ -1,58 +1,67 @@
 import React, { useEffect, useState } from "react";
 import {
     useAuthState,
+    useSendPasswordResetEmail,
     useSignInWithEmailAndPassword,
     useSignInWithGoogle,
 } from "react-firebase-hooks/auth";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import auth from "../../firebase.init";
+import Loading from "../Loading/Loading";
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errorEmail, setErrorEmail] = useState("");
     const [errorPass, setErrorPass] = useState("");
+
+    // sign in with email and pass hook
     const [signInWithEmailAndPassword, , loading, error] =
         useSignInWithEmailAndPassword(auth);
-    const [signInWithGoogle, , , errorGoogle] = useSignInWithGoogle(auth);
+
+    //sign in with google hook
+    const [signInWithGoogle, , updating, errorGoogle] =
+        useSignInWithGoogle(auth);
     const [user] = useAuthState(auth);
 
+    // password reset hook
+    const [sendPasswordResetEmail, sending, errorReset] =
+        useSendPasswordResetEmail(auth);
+
+    // hooks and states for redirect to intended page
     const navigate = useNavigate();
     let location = useLocation();
     let path = location.state?.from?.pathname || "/";
 
     // for capturing emaill
     const captureEmail = (event) => {
-        setEmail(event.target.value);
+        let email = event.target.value;
+        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+            setEmail(email);
+            setErrorEmail("");
+        } else {
+            setErrorEmail("Please Enter a valid Email");
+        }
     };
 
     // for capturing password
     const capturePassword = (event) => {
-        setPassword(event.target.value);
+        let password = event.target.value;
+        if (password.length >= 6) {
+            setPassword(password);
+            setErrorPass("");
+        } else {
+            setErrorPass("Password should contain at least 6 characters");
+        }
     };
 
     // handling submit button
     const handleSubmit = async (event) => {
         event.preventDefault();
-        // for email validation
-        let localErrorEmail = false;
-        let localErrorPass = false;
-        if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
-            localErrorEmail = true;
-            setErrorEmail("Please Enter a valid Email");
-        } else {
-            setErrorEmail("");
-        }
 
-        // for password validation
-        if (password.length < 6) {
-            localErrorPass = true;
-            setErrorPass("Password should contain at least 6 characters");
-        } else {
-            setErrorPass("");
-        }
-
-        if (!localErrorEmail && !localErrorPass) {
+        if (email && password) {
             console.log(password, email);
             await signInWithEmailAndPassword(email, password);
         }
@@ -63,9 +72,22 @@ const Login = () => {
         signInWithGoogle();
     };
 
+    // handler for jpassword reset
+    const resetPassword = () => {
+        if (email) {
+            sendPasswordResetEmail(email);
+        } else {
+            toast("Enter email please!!");
+        }
+    };
+
     useEffect(() => {
         if (user) {
             navigate(path, { replace: true });
+        }
+
+        if (sending) {
+            toast("Sending...");
         }
     });
 
@@ -121,23 +143,32 @@ const Login = () => {
                     value="submit"
                 />
             </form>
+            {/* showing register link */}
             <p className="mt-2 text-center">
                 Don't have an account?
                 <span className="text-cyan-600 ml-2 font-bold">
                     <Link to="/register">Register</Link>
                 </span>
             </p>
+            {/* showing password reset link */}
             <p className="mt-2 text-center">
                 Or
-                <span className="text-cyan-600 ml-2 font-bold">
-                    <Link to="/register">Forgot Password</Link>
+                <span>
+                    <button
+                        onClick={resetPassword}
+                        className="text-cyan-600 ml-2 font-bold"
+                    >
+                        Forgot Password
+                    </button>
                 </span>
             </p>
+            <ToastContainer />
             <div className="flex mx-auto justify-center items-center mt-5">
                 <div className="w-2/5 h-[2px] bg-slate-700"></div>
                 <div className="w-2 h-2 rounded-full bg-slate-700 mx-1"></div>
                 <div className="w-2/5 h-[2px] bg-slate-700"></div>
             </div>
+            {/* google sign in button */}
             <button
                 onClick={handleGoogleSignIn}
                 className="flex justify-center items-center mx-auto mt-5 text-center w-80 h-10 border-[2px] border-cyan-500 rounded"
@@ -171,14 +202,19 @@ const Login = () => {
                 </span>
                 <span>SignIn With Google</span>
             </button>
+
+            {/* Showing error messages */}
             <p className="mt-2 text-center text-red-600 ml-2 font-bold">
                 {error?.message}
             </p>
             <p className="mt-2 text-center text-red-600 ml-2 font-bold">
                 {errorGoogle?.message}
             </p>
+            <p className="mt-2 text-center text-red-600 ml-2 font-bold">
+                {errorReset?.message}
+            </p>
             <p className="mt-2 text-center text-cyan-600 ml-2 font-bold">
-                {loading ? "Loading..." : ""}
+                {loading || updating ? "Loading..." : ""}
             </p>
         </div>
     );
