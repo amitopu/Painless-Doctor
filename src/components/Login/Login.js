@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
     useAuthState,
     useSignInWithEmailAndPassword,
+    useSignInWithGoogle,
 } from "react-firebase-hooks/auth";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import auth from "../../firebase.init";
@@ -13,6 +14,8 @@ const Login = () => {
     const [errorPass, setErrorPass] = useState("");
     const [signInWithEmailAndPassword, , loading, error] =
         useSignInWithEmailAndPassword(auth);
+    const [signInWithGoogle, , loadingGoogle, errorGoogle] =
+        useSignInWithGoogle(auth);
     const [user] = useAuthState(auth);
 
     const navigate = useNavigate();
@@ -56,9 +59,15 @@ const Login = () => {
         }
     };
 
+    // handler for sign in with google
+    const handleGoogleSignIn = () => {
+        signInWithGoogle();
+    };
+
     useEffect(() => {
         if (user) {
             navigate(path, { replace: true });
+            console.log(user);
         }
         console.log("called");
     });
@@ -132,7 +141,10 @@ const Login = () => {
                 <div className="w-2 h-2 rounded-full bg-slate-700 mx-1"></div>
                 <div className="w-2/5 h-[2px] bg-slate-700"></div>
             </div>
-            <button className="flex justify-center items-center mx-auto mt-5 text-center w-80 h-10 border-[2px] border-cyan-500 rounded">
+            <button
+                onClick={handleGoogleSignIn}
+                className="flex justify-center items-center mx-auto mt-5 text-center w-80 h-10 border-[2px] border-cyan-500 rounded"
+            >
                 <span>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -164,6 +176,9 @@ const Login = () => {
             </button>
             <p className="mt-2 text-center text-red-600 ml-2 font-bold">
                 {error?.message}
+            </p>
+            <p className="mt-2 text-center text-red-600 ml-2 font-bold">
+                {errorGoogle?.message}
             </p>
             <p className="mt-2 text-center text-cyan-600 ml-2 font-bold">
                 {loading ? "Loading..." : ""}
