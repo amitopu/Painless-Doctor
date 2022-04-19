@@ -1,7 +1,10 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import auth from "../../firebase.init";
-import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
+import {
+    useAuthState,
+    useCreateUserWithEmailAndPassword,
+} from "react-firebase-hooks/auth";
 
 const Register = () => {
     const [email, setEmail] = useState("");
@@ -10,9 +13,13 @@ const Register = () => {
     const [errorEmail, setErrorEmail] = useState("");
     const [errorPass, setErrorPass] = useState("");
     const [errorPassNotMatch, setErrorPassNotMatch] = useState("");
-    const [createUserWithEmailAndPassword, user, loading, error] =
-        useCreateUserWithEmailAndPassword(auth);
+    const [createUserWithEmailAndPassword, , loading, error] =
+        useCreateUserWithEmailAndPassword(auth, {
+            sendEmailVerification: true,
+        });
+    const [user] = useAuthState(auth);
 
+    const navigate = useNavigate();
     // for capturing emaill
     const captureEmail = (event) => {
         setEmail(event.target.value);
@@ -29,7 +36,7 @@ const Register = () => {
     };
 
     // handling submit button
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         // for email validation
         let localErrorEmail = false;
@@ -61,10 +68,16 @@ const Register = () => {
         // if no error then authenticate/login/register
         if (!localErrorEmail && !localErrorPass && !localPassNotMatch) {
             console.log(password, email);
-            createUserWithEmailAndPassword(email, password);
+            await createUserWithEmailAndPassword(email, password);
         }
     };
-    console.log(user);
+
+    useEffect(() => {
+        if (user) {
+            navigate("/");
+        }
+    });
+
     return (
         <div className="w-[400px] mx-auto text-left mt-10 border-4 border-cyan-500 p-5">
             <form onSubmit={handleSubmit}>
@@ -144,7 +157,7 @@ const Register = () => {
                 {loading ? "Loading..." : ""}
             </p>
             <p className="mt-2 text-center text-red-600 ml-2 font-bold">
-                {error?.messege}
+                {error?.message}
             </p>
         </div>
     );

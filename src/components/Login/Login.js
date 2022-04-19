@@ -1,12 +1,23 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import {
+    useAuthState,
+    useSignInWithEmailAndPassword,
+} from "react-firebase-hooks/auth";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import auth from "../../firebase.init";
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errorEmail, setErrorEmail] = useState("");
     const [errorPass, setErrorPass] = useState("");
-    const [error, setError] = useState("");
+    const [signInWithEmailAndPassword, , loading, error] =
+        useSignInWithEmailAndPassword(auth);
+    const [user] = useAuthState(auth);
+
+    const navigate = useNavigate();
+    let location = useLocation();
+    let path = location.state?.from?.pathname || "/";
 
     // for capturing emaill
     const captureEmail = (event) => {
@@ -19,7 +30,7 @@ const Login = () => {
     };
 
     // handling submit button
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         // for email validation
         let localErrorEmail = false;
@@ -41,8 +52,16 @@ const Login = () => {
 
         if (!localErrorEmail && !localErrorPass) {
             console.log(password, email);
+            await signInWithEmailAndPassword(email, password);
         }
     };
+
+    useEffect(() => {
+        if (user) {
+            navigate(path, { replace: true });
+        }
+        console.log("called");
+    });
 
     return (
         <div className="w-[400px] mx-auto text-left mt-10 border-4 border-cyan-500 p-5">
@@ -144,7 +163,10 @@ const Login = () => {
                 <span>SignIn With Google</span>
             </button>
             <p className="mt-2 text-center text-red-600 ml-2 font-bold">
-                {error}
+                {error?.message}
+            </p>
+            <p className="mt-2 text-center text-cyan-600 ml-2 font-bold">
+                {loading ? "Loading..." : ""}
             </p>
         </div>
     );

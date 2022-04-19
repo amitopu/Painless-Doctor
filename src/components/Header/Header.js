@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import auth from "../../firebase.init";
+import { signOut } from "firebase/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const Header = () => {
     const [toggle, setToggle] = useState(false);
+    const [user, loading, error] = useAuthState(auth);
 
     // for menue button toggle
     const manageToggle = () => {
@@ -11,6 +15,10 @@ const Header = () => {
         } else {
             setToggle(true);
         }
+    };
+
+    const logoutUser = () => {
+        signOut(auth);
     };
 
     return (
@@ -72,7 +80,13 @@ const Header = () => {
                         <Link to="/about">About</Link>
                     </div>
                     <div className="mx-auto md:mr-5 font-bold text-white hover:font-extrabold md:hover:border-b-2 md:hover:border-white w-40 md:w-auto">
-                        <Link to="/login">Login</Link>
+                        {user ? (
+                            <button onClick={logoutUser} className="font-bold">
+                                Logout
+                            </button>
+                        ) : (
+                            <Link to="/login">Login</Link>
+                        )}
                     </div>
                 </div>
             </nav>
