@@ -14,8 +14,7 @@ const Login = () => {
     const [errorPass, setErrorPass] = useState("");
     const [signInWithEmailAndPassword, , loading, error] =
         useSignInWithEmailAndPassword(auth);
-    const [signInWithGoogle, , loadingGoogle, errorGoogle] =
-        useSignInWithGoogle(auth);
+    const [signInWithGoogle, , , errorGoogle] = useSignInWithGoogle(auth);
     const [user] = useAuthState(auth);
 
     const navigate = useNavigate();
@@ -67,9 +66,7 @@ const Login = () => {
     useEffect(() => {
         if (user) {
             navigate(path, { replace: true });
-            console.log(user);
         }
-        console.log("called");
     });
 
     return (
